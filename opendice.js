@@ -5,7 +5,8 @@ function convolve (a, b) {
 		let d
 		for (let i = 0; i < a.length + b.length - 1; i++) {
 			d = 0
-			for (let j = 0; i - j > -1; j++) {
+			for (let j = 0; j <= i && j < a.length; j++) {
+				if (i-j >= b.length) { continue }
 				d += a[j] * b[i-j]
 			}
 			c.push(d)
