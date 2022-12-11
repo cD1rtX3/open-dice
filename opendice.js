@@ -1,4 +1,4 @@
-// Copyright COArSe_D1RTxxx under GPLv3 on 8 December 2022
+// Copyleft COArSe_D1RTxxx under GPLv3 on 8 December 2022
 function convolve (a, b) {
 	if (Array.isArray(a) && Array.isArray(b)) {
 		let c = []
@@ -24,8 +24,8 @@ class Dice {
 		switch (typeof t) {
 			case "number":
 				this.m = n
-				x = [...Array(t).keys()].map(x => 1)
-				y = [...Array(t).keys()].map(x => 1)
+				x = [...Array(t).keys()].map(z => 1)
+				y = [...Array(t).keys()].map(z => 1)
 				for (let i = 1; i < n; i++) {
 					x = convolve(x, y)
 				}
