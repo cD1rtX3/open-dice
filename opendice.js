@@ -1,5 +1,5 @@
 // Copyright COArSe_D1RTxxx under GPLv3 on 8 December 2022
-function convolve (a, b) {
+function convolve (a, b) { // I honestly don't care if you just yoink the convolve function; it's not that good anyway.
 	if (Array.isArray(a) && Array.isArray(b)) {
 		let c = []
 		let d
@@ -23,12 +23,13 @@ class Dice {
 	constructor (t, n) {
 		switch (typeof t) {
 			case "number":
-				m = n
-				a = [...Array(n).keys()].map(x => 1)
-				b = [...Array(n).keys()].map(x => 1)
+				this.m = n
+				x = [...Array(t).keys()].map(x => 1)
+				y = [...Array(t).keys()].map(x => 1)
 				for (let i = 1; i < n; i++) {
-					a = convolve(a, b)
+					x = convolve(x, y)
 				}
+				this.a = x.map(z => z/Math.pow(t, n))
 				break
 			case "object":
 				if (Array.isArray(t)) {
