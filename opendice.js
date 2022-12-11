@@ -1,5 +1,5 @@
 // Copyright COArSe_D1RTxxx under GPLv3 on 8 December 2022
-function convolve (a, b) { // I honestly don't care if you just yoink the convolve function; it's not that good anyway.
+function convolve (a, b) {
 	if (Array.isArray(a) && Array.isArray(b)) {
 		let c = []
 		let d
