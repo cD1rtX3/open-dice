@@ -1,10 +1,11 @@
 // Licensed by Coarse Rosinflower under GPLv3 on 8 December 2022
 
 class _d {
-	static sort (x:number[]):number[]; static sort (x:number[], a:boolean):object;
-	static sort (x:number[], a?:boolean):object { // shell sort
+	static sort (x:number[]):number[]; static sort (x:number[], a:boolean):object; static sort (x:number[], a:number[]):number[][];
+	static sort (x:number[], a?:any):object { // shell sort
 		if (x.length == 0) {return (a ? [[], []] : [])}
-		let arr = x, n:number[] = [...(Array(x.length).keys())], t:number
+		let arr = x, n:number[], t:number
+		if (Array.isArray(a)) {n = a} else {n = [...(Array(x.length).keys())]}
 		const gaps = [1750, 701, 301, 132, 57, 23, 10, 4, 1]
 		if (a) {
 			gaps.forEach(function(g){
