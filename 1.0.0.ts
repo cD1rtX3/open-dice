@@ -26,6 +26,12 @@ class _d {
 	}
 	static convolve (x:number[], y:number[]):number[]; static convolve (x:_d, y:_d):_d;
 	static convolve (x:object, y:object):object {
-		//
+		if (Array.isArray(x)) {
+			let a = [...Array(x.length + y.length - 1)].map(n => 0)
+			for (let i = 0; i < x.length; i++) {for (let j = 0; j < y.length; j++) {a[i + j] += x[i] * y[j]}}
+			return a
+		} else {
+			//
+		}
 	}
 }
