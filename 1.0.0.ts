@@ -2,30 +2,53 @@
 
 class _d {
 	static sort (x:number[]):number[]; static sort (x:number[], a:boolean):object; static sort (x:number[], a:number[]):number[][];
-	static sort (x:number[], a?:any):object {
-		if (x.length == 0) {return (a ? [[], []] : [])}
-		let arr = x, n:number[], t:number, b:boolean
-		if (Array.isArray(a)) {n = a} else {n = [...(Array(x.length).keys())]}
-		const gaps = [1750, 701, 301, 132, 57, 23, 10, 4, 1]
-		if (a) {
-			gaps.forEach(function(g){
-				b = true
-				while (b) {b = false; for (let i = g; i < x.length; i++) {
-					if (arr[i] < arr[i - g]) {t = arr[i]; arr[i] = arr[i - g]; arr[i - g] = t; t = n[i]; n[i] = n[i - g]; n[i - g] = t; b = true}
-				}}
-			})
+	static sort (x:number[], z?:any):object {
+		if (x.length == 0) {return (z ? [[], []] : [])}
+		let a = x, b = Array(x.length), m: number, e: number, li: number, ri: number, ti: number, z2 = z ? (typeof z === "object" ? z : [...Array(x.length).keys()]) : undefined, c
+		if (z) {
+			for (let w = 1; w < x.length; w *= 2) {
+				for (let s = 0; s < x.length; s += 2*w) {
+					m = Math.min(s + w, x.length)
+					e = Math.min(s + 2*w, x.length)
+					li = s, ri = m, ti = s
+					while (li < m && ri < e) {
+						if (a[li] <= a[ri]) {
+							b[ti++] = a[li++]; c[ti] = z2[li]
+						} else {
+							b[ti++] = a[ri++]; c[ti] = z2[ri]
+						}
+					}
+					while (li < m) b[ti++] = a[li++]
+					while (ri < e) b[ti++] = a[ri++]
+					for (let i = s; i < e; i++) a[i] = b[i]
+					for (let i = s; i < e; i++) z2[i] = c[i]
+				}
+			}
 		} else {
-			gaps.forEach(function(g){
-				b = true
-				while (b) {b = false; for (let i = g; i < x.length; i++) {
-					if (arr[i] < arr[i - g]) {t = arr[i]; arr[i] = arr[i - g]; arr[i - g] = t; b = true}
-				}}
-			})
+			for (let w = 1; w < x.length; w *= 2) {
+				for (let s = 0; s < x.length; s += 2*w) {
+					m = Math.min(s + w, x.length)
+					e = Math.min(s + 2*w, x.length)
+					li = s, ri = m, ti = s
+					while (li < m && ri < e) {
+						if (a[li] <= a[ri]) {
+							b[ti++] = a[li++]
+						} else {
+							b[ti++] = a[ri++]
+						}
+					}
+					while (li < m) b[ti++] = a[li++]
+					while (ri < e) b[ti++] = a[ri++]
+					for (let i = s; i < e; i++) {
+						a[i] = b[i]
+					}
+				}
+			}
 		}
-		return (a ? [arr, n] : arr)
+		return z ? [a, z2] : a
 	}
 	static convolve (x:number[], y:number[]):number[]; static convolve (x:_d, y:_d):_d;
-	static convolve (x:object, y:object):object {
+	static convolve (x:any, y:any):object {
 		if (x instanceof Array) {
 			let a = [...Array(x.length + y.length - 1)].map(n => 0)
 			for (let i = 0; i < x.length; i++) {for (let j = 0; j < y.length; j++) {a[i + j] += x[i] * y[j]}}
