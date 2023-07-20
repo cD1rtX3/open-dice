@@ -23,6 +23,7 @@ class _d {
 					}
 					while (ri < e) {
 						b[ti] = a[ri]; c[ti++] = z2[ri++]
+					}
 					for (let i = s; i < e; i++) a[i] = b[i]
 					for (let i = s; i < e; i++) z2[i] = c[i]
 				}
