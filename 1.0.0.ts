@@ -13,13 +13,16 @@ class _d {
 					li = s, ri = m, ti = s
 					while (li < m && ri < e) {
 						if (a[li] <= a[ri]) {
-							b[ti++] = a[li++]; c[ti] = z2[li]
+							b[ti] = a[li]; c[ti++] = z2[li++]
 						} else {
-							b[ti++] = a[ri++]; c[ti] = z2[ri]
+							b[ti] = a[ri]; c[ti++] = z2[ri++]
 						}
 					}
-					while (li < m) b[ti++] = a[li++]
-					while (ri < e) b[ti++] = a[ri++]
+					while (li < m) {
+						b[ti] = a[li]; c[ti++] = z2[li++]
+					}
+					while (ri < e) {
+						b[ti] = a[ri]; c[ti++] = z2[ri++]
 					for (let i = s; i < e; i++) a[i] = b[i]
 					for (let i = s; i < e; i++) z2[i] = c[i]
 				}
