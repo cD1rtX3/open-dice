@@ -4,7 +4,7 @@ class _d {
 	static sort (x: number[]): number[]; static sort (x: number[], a: boolean): object; static sort (x: number[], a: number[]): number[][];
 	static sort (x: number[], z?: any): any {
 		if (x.length == 0) {return (z ? [[], []] : [])}
-		let a = x, b = Array(x.length), m: number, e: number, li: number, ri: number, ti: number, z2 = z ? (typeof z === "object" ? z : [...Array(x.length).keys()]) : undefined, c = Array(x.length)
+		let a = [...x], b = Array(x.length), m: number, e: number, li: number, ri: number, ti: number, z2 = z ? (typeof z === "object" ? z : [...Array(x.length).keys()]) : undefined, c = Array(x.length)
 		if (z) {
 			for (let w = 1; w < x.length; w *= 2) {
 				for (let s = 0; s < x.length; s += 2*w) {
