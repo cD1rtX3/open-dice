@@ -3,53 +3,54 @@
 class _d {
 	static sort (x: number[]): number[]; static sort (x: number[], a: boolean): object; static sort (x: number[], a: number[]): number[][];
 	static sort (x: number[], z?: any): any {
-		if (x.length == 0) {return (z ? [[], []] : [])}
-		let a = [...x], b = Array(x.length), m: number, e: number, li: number, ri: number, ti: number, z2 = z ? (typeof z === "object" ? z : [...Array(x.length).keys()]) : undefined, c = Array(x.length)
+		if (x.length == 0) {
+			return z ? [[], []] : [];
+		}
+		let a = [...x], b = Array(x.length), m: number, e: number, li: number, ri: number, ti: number, z2 = z ? (typeof z === "object" ? z : [...Array(x.length).keys()]) : undefined, c = Array(x.length);
 		if (z) {
 			for (let w = 1; w < x.length; w *= 2) {
 				for (let s = 0; s < x.length; s += 2*w) {
-					m = Math.min(s + w, x.length)
-					e = Math.min(s + 2*w, x.length)
-					li = s, ri = m, ti = s
+					m = Math.min(s + w, x.length);
+					e = Math.min(s + 2*w, x.length);
+					li = s, ri = m, ti = s;
 					while (li < m && ri < e) {
 						if (a[li] <= a[ri]) {
-							b[ti] = a[li]; c[ti++] = z2[li++]
-						} else {
-							b[ti] = a[ri]; c[ti++] = z2[ri++]
+							b[ti] = a[li]; c[ti++] = z2[li++];
+						}
+						else {
+							b[ti] = a[ri]; c[ti++] = z2[ri++];
 						}
 					}
 					while (li < m) {
-						b[ti] = a[li]; c[ti++] = z2[li++]
+						b[ti] = a[li]; c[ti++] = z2[li++];
 					}
 					while (ri < e) {
-						b[ti] = a[ri]; c[ti++] = z2[ri++]
+						b[ti] = a[ri]; c[ti++] = z2[ri++];
 					}
-					for (let i = s; i < e; i++) a[i] = b[i]
-					for (let i = s; i < e; i++) z2[i] = c[i]
 				}
+				a = b.slice();
+				z2 = c.slice();
 			}
 		} else {
 			for (let w = 1; w < x.length; w *= 2) {
 				for (let s = 0; s < x.length; s += 2*w) {
-					m = Math.min(s + w, x.length)
-					e = Math.min(s + 2*w, x.length)
-					li = s, ri = m, ti = s
+					m = Math.min(s + w, x.length);
+					e = Math.min(s + 2*w, x.length);
+					li = s, ri = m, ti = s;
 					while (li < m && ri < e) {
 						if (a[li] <= a[ri]) {
-							b[ti++] = a[li++]
+							b[ti++] = a[li++];
 						} else {
-							b[ti++] = a[ri++]
+							b[ti++] = a[ri++];
 						}
 					}
-					while (li < m) b[ti++] = a[li++]
-					while (ri < e) b[ti++] = a[ri++]
-					for (let i = s; i < e; i++) {
-						a[i] = b[i]
-					}
+					while (li < m) b[ti++] = a[li++];
+					while (ri < e) b[ti++] = a[ri++];
 				}
+				a = b.slice();
 			}
 		}
-		return z ? [a, z2] : a
+		return z ? [a, z2] : a;
 	}
 	static convolve (x: number[], y: number[]): number[]; static convolve (x: _d, y: _d): _d;
 	static convolve (x: any, y: any): any {
