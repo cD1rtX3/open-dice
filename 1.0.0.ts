@@ -1,4 +1,4 @@
-// Licensed by Coarse Rosinflower under GPLv3 on 8 December 2022
+// Licensed by Coarse Rosinflower under LGPLv2.1 on 4 September 2023
 
 "use strict";
 
