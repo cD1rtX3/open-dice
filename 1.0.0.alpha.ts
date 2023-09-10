@@ -170,23 +170,34 @@ class _d {
 				throw new Error("Second argument to constructor must be a positive integer or undefined.");
 			} else {
 				if (typeof die === "number") {
-					let t = [...Array(die).keys()].map(n1 => n1 + 1), u = [...Array(die)].map(() => 1/die);
+					let n = [...Array(die).keys()].map(n1 => n1 + 1), p = [...Array(die)].map(() => 1/die);
 					for (let i = 0; i < amt; i++) {
-						this.nums[i] = t;
-						this.prob[i] = u;
+						this.nums[i] = n;
+						this.prob[i] = p;
 					}
 					this.length = amt;
 					this.totN = [...Array(amt * (die - 1) + 1).keys()].map(x => x + amt);
 					this.totP = this.prob.reduce((x, y) => _d.convolve(x, y));
 				}
 				else if (Array.isArray(die)) {
-					[this.totN, this.totP] = [this.nums[0], this.prob[0]] = _d.arrayToNP(die);
-					length = 1;
+					let [n, p] = _d.arrayToNP(die);
+					for (let i = 0; i < amt; i++) {
+						this.nums[i] = n;
+						this.prob[i] = p;
+					}
+					length = amt;
+					this.totN = this.nums.reduce((x, y) => _d.convolve(x, y));
+					this.totP = this.prob.reduce((x, y) => _d.convolve(x, y));
 				}
 				else if (die instanceof _d) {
+					let n = die.totN, p = die.totP;
+					this.length = amt;
 					while (amt--) {
-						//
+						this.nums[amt] = n;
+						this.prob[amt] = p;
 					}
+					this.totN = this.nums.reduce((x, y) => _d.convolve(x, y));
+					this.totP = this.prob.reduce((x, y) => _d.convolve(x, y));
 				}
 				else {
 					throw new Error("First argument to constructor must be a number, Array<number>, _d, or undefined.");
@@ -297,10 +308,9 @@ class _d {
 					this.length++;
 					this.totN = _d.convolve(this.totN, argv[i][0]);
 					this.totP = _d.convolve(this.totP, argv[i][1]);
+					continue;
 				}
-				else {
-					throw new Error("Every argument to push must either be an [n, p] array or _d.");
-				}
+				throw new Error("Every argument to push must either be an [n, p] array or _d.");
 			}
 			else if (argv[i] instanceof _d) {
 				this.nums.push(...argv[i].nums);
@@ -308,10 +318,9 @@ class _d {
 				this.length += argv[i].length;
 				this.totN = _d.convolve(this.totN, argv[i].totN);
 				this.totP = _d.convolve(this.totP, argv[i].totP);
+				continue;
 			}
-			else {
-				throw new Error("Every argument to push must either be an [n, p] array or _d.");
-			}
+			throw new Error("Every argument to push must either be an [n, p] array or _d.");
 		}
 	}
 }
