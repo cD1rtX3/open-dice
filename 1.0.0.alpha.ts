@@ -80,23 +80,17 @@ class _d {
 		return z ? [a, z2] : a;
 	}
 	/**
-	 * Returns the convolution of two numerical arrays or dice.
+	 * Returns the convolution of two numerical arrays.
 	 */
-	static convolve(x: number[], y: number[]): number[];
-	static convolve(x: _d, y: _d): _d;
-	static convolve(x: any, y: any): any {
+	static convolve(x: number[], y: number[]): number[] {
 		// TODO: fftconvolve
-		if (x instanceof Array) {
-			let a = [...Array(x.length + y.length - 1)].map(() => 0);
-			for (let i = 0; i < x.length; i++) {
-				for (let j = 0; j < y.length; j++) {
-					a[i + j] += x[i] * y[j];
-				}
+		let a = [...Array(x.length + y.length - 1)].map(() => 0);
+		for (let i = 0; i < x.length; i++) {
+			for (let j = 0; j < y.length; j++) {
+				a[i + j] += x[i] * y[j];
 			}
-			return a;
-		} else {
-			//
 		}
+		return a;
 	}
 	/**
 	 * Converts an array of values into an [n, p] array, where n is the list of numbers and p is the list of probabilities.
@@ -117,7 +111,49 @@ class _d {
 		return [n, p];
 	}
 	/**
-	 * Takes a list of values, an array of values, an [n, p] array, or a die, and returns the mean. If a die is passed, it is expected to be sorted.
+	 * Takes a list of values, an array of values, an [n, p] array, or a die, and returns the median. If a die or [n, p] is passed, it is expected that its probabilities sum to 1.
+	 */
+	static median(x: number[]): number;
+	static median(x: [number[], number[]]): number;
+	static median(x: _d): number;
+	static median(...x: number[]): number
+	static median(...argv: any[]): any {
+		switch (typeof argv[0]) {
+			case "number":
+					let a = _d.sort(argv);
+					let b = (argv.length - 1) / 2;
+					return (a[Math.floor(b)] + a[Math.ceil(b)]) / 2;
+			case "object":
+				if (argv[0] instanceof _d) {
+					let [n, p] = _d.sort(argv[0].totN, argv[0].totP);
+					let x = 0.5, i = 0;
+					for (; x > 0; i++) {
+						x -= p[i];
+					}
+					return n[i - 1];
+				}
+				else if (Array.isArray(argv[0])) {
+					if (Array.isArray(argv[0][0])) {
+						let [n, p] = _d.sort(argv[0][0], argv[0][1]);
+						let x = 0.5, i = 0;
+						for (; x > 0; i++) {
+							x -= p[i];
+						}
+						return n[i - 1];
+					}
+					else {
+						let a = _d.sort(argv[0]);
+						let b = (argv[0].length - 1) / 2;
+						return (a[Math.floor(b)] + a[Math.ceil(b)]) / 2;
+					}
+				}
+				throw new Error("Invalid argument vector to median; must be a list of numbers, Array<number>, [n, p] array, or _d.");
+			default:
+				throw new Error("Invalid argument vector to median; must be a list of numbers, Array<number>, [n, p] array, or _d.");
+		}
+	}
+	/**
+	 * Takes a list of values, an array of values, an [n, p] array, or a die, and returns the mean. If a die or [n, p] is passed, it is expected that its probabilities sum to 1.
 	 */
 	static mean(x: number[]): number;
 	static mean(x: [number[], number[]]): number;
@@ -126,15 +162,30 @@ class _d {
 	static mean(...argv: any): any {
 		switch (typeof argv[0]) {
 			case "number":
-				// We can assume that the rest of the elements are also numbers.
 				let sum = argv.reduce((x: number, y: number) => x + y);
 				return sum / argv.length;
 			case "object":
 				if (argv[0] instanceof _d) {
-					//
+					let sum = 0;
+					for (let i in argv[0].totN) {
+						sum += argv[0].totN[i] / argv[0].totP[i];
+					}
+					return sum;
 				}
-				else {}
-				break;
+				else if (Array.isArray(argv[0])) {
+					if (Array.isArray(argv[0][0])) {
+						let sum = 0;
+						for (let i in argv[0][0]) {
+							sum += argv[0][0][i] / argv[0][1][i];
+						}
+						return sum;
+					}
+					else {
+						let sum = argv[0].reduce((x, y) => x + y);
+						return sum / argv[0].length;
+					}
+				}
+				throw new Error("Invalid argument vector to mean; must be a list of numbers, Array<number>, [n, p] array, or _d.");
 			default:
 				throw new Error("Invalid argument vector to mean; must be a list of numbers, Array<number>, [n, p] array, or _d.");
 		}
@@ -276,6 +327,10 @@ class _d {
 			let epsilon = 1.1102230246251565e-16;
 			do {
 				for (let i = 0; sum !== 1 && i < this.totP.length; i--) {
+					// So that we don't give the graph a tail
+					if (this.totP[i] < 2.220446049250313e-16) {
+						continue;
+					}
 					this.totP[i] += epsilon;
 					sum += epsilon;
 				}
